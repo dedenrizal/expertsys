@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Diagnosa Tanaman Cabai</title>
+</head>
+<body>
+    <h1>Diagnosa Penyakit Tanaman Cabai</h1>
+
+    <form method="post">
+        {% csrf_token %}
+        <h3>Gejala yang Dialami:</h3>
+        {% for symptom in symptoms %}
+            <label>
+                <input type="checkbox" name="symptoms" value="{{ symptom.code }}"> {{ symptom.name }}
+            </label><br>
+        {% endfor %}
+
+        <p>
+            <label>Tingkat Kepercayaan: </label>
+            <select name="confidence">
+                <option value="0.5">0.5</option>
+                <option value="0.6">0.6</option>
+                <option value="0.7">0.7</option>
+                <option value="0.8">0.8</option>
+                <option value="0.9">0.9</option>
+                <option value="1.0" selected>1.0</option>
+            </select>
+        </p>
+
+        <button type="submit">Diagnosa Sekarang</button>
+    </form>
+
+    {% if results %}
+        <h2>Hasil Diagnosa:</h2>
+        <ul>
+            {% for name, weight in results %}
+                <li>{{ name }}{% if weight %} (Bobot: {{ weight|floatformat:2 }}){% endif %}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    {% if explanations %}
+        <h2>Penjelasan:</h2>
+        {% for exp in explanations %}
+            <div style="margin: 5px 0; padding: 5px; background: #eee; border-left: 3px solid #333;">
+                {{ exp }}
+            </div>
+        {% endfor %}
+    {% endif %}
+</body>
+</html>
