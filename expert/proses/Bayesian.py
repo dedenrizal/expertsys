@@ -25,14 +25,14 @@ class Bayesian:
     def __str__(self):
         return f'bayesian(prior = {self.priors})'
     
+# for testing!!!
+# prior = {'flu' : 0.25, 'covid' : 0.15, 'alergi_dingin':0.15}
+# caught = {'flu' : 0.1, 'covid' : 0.8, 'alergi_dingin': 0.1}
+# bayes = Bayesian(prior)
+# print(f' batuk {bayes.posterior(caught)}')
 
-prior = {'flu' : 0.25, 'covid' : 0.15, 'alergi_dingin':0.15}
-caught = {'flu' : 0.1, 'covid' : 0.8, 'alergi_dingin': 0.1}
-bayes = Bayesian(prior)
-print(f' batuk {bayes.posterior(caught)}')
+# headache = {'flu' : 0.5, 'covid' : 0.5, 'alergi_dingin' : 0.5}
+# print(f' sakit kepala {bayes.posterior(headache)}')
 
-headache = {'flu' : 0.5, 'covid' : 0.5, 'alergi_dingin' : 0.5}
-print(f' sakit kepala {bayes.posterior(headache)}')
-
-print(f' multiply {bayes.posteriors_multiple([caught, headache])}')
+# print(f' multiply {bayes.posteriors_multiple([caught, headache])}')
     
