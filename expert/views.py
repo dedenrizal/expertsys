@@ -9,7 +9,7 @@ def diagnose_view(request):
     explanations = []
 
     if request.method == 'POST':
-        selected_codes = request.POST.getlist('symptoms')  
+        selected_codes = request.POST.getlist('symptoms')
         confidence = float(request.POST.get('confidence', 1.0))
 
         initial_facts_with_weights = {
@@ -33,7 +33,6 @@ def diagnose_view(request):
                 else:
                     results.append((fact_code, weight))
 
-            # Simpan ke database
             DiagnosisResult.objects.create(
                 user_input=initial_facts_with_weights,
                 final_facts=final_facts,
