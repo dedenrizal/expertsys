@@ -92,6 +92,9 @@ class InferenceEngine:
                 is_satisfied, condition_weight = self.evaluate_condition(rule.conditions, facts_with_weights)
                 conclusion_fact = rule.conclusion["fact"]
                 conclusion_weight = rule.conclusion["weight"]
+                
+                # print(f'{conclusion_fact} : {conclusion_weight} : {is_satisfied} : {condition_weight}')
+                
                 priority = rule.priority
 
                 if is_satisfied and conclusion_fact not in facts_with_weights:
@@ -118,16 +121,32 @@ class InferenceEngine:
             return True, fact_with_weight[goal]
         
         rules = self.kb.get_all_rules()
-        relevant_rules = [rule for rule in rules if rules.conclusion['fact'] == goal]
+        relevant_rules = [rule for rule in rules if rule.conclusion['fact'] == goal]
         relevant_rules.sort(key=lambda r : r.priority, reverse=True)
 
         for rule in relevant_rules:
             condition = rule.conditions
             conclusion_weight = rule.conclusion["weight"]
-            is_satisfied, condition_weight = self.evaluate_condition_bacward(condition, fact_with_weight)
+            is_satisfied, condition_weight = self.evaluate_condition_backward(condition, fact_with_weight)
 
             if is_satisfied:
                 return True, min(conclusion_weight, condition_weight)
             
         return False, 0
     
+    #untuk menegecek apakah engine berjalan atau tidak
+    def tested_chain(self, initial_fact_with_weight, target_conclusion = None):
+        forward_facts, explanations = self.forward_chain(initial_fact_with_weight)
+        print(f'{forward_facts}:{explanations}')
+
+        if not target_conclusion:
+            return forward_facts, explanations
+        print(f'{target_conclusion}')
+        
+        is_proven, confidence = self.backward_chain(target_conclusion, initial_fact_with_weight)
+        print(f'{is_proven}: {confidence}')
+
+        if is_proven:
+            forward_facts[target_conclusion] = confidence
+
+        return forward_facts, explanations  

@@ -21,6 +21,8 @@ def diagnose_view(request):
         else:
             engine = InferenceEngine()
             final_facts, explanations = engine.forward_chain(initial_facts_with_weights)
+            print(f'{final_facts} : {explanations}')
+            
 
             for fact_code, weight in final_facts.items():
                 conclusion = Conclusion.objects.filter(code=fact_code).first()

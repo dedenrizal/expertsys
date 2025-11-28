@@ -1,56 +1,118 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
-    <title>Diagnosa Tanaman Cabai</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diagnosa Penyakit Tanaman Cabai</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        poppins: ['Poppins', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+    </style>
 </head>
-<body>
-    <nav class="w-full h-8 bg-teal-700">
-
-    </nav>
-    <h1>Diagnosa Penyakit Tanaman Cabai</h1>
-
-    <form method="post" class="">
-        {% csrf_token %}
-        <h3>Gejala yang Dialami:</h3>
-        {% for symptom in symptoms %}
-            <label>
-                <input type="checkbox" name="symptoms" value="{{ symptom.code }}" > {{ symptom.name }}
-            </label><br>
-        {% endfor %}
-
-        <p>
-            <label>Tingkat Kepercayaan: </label>
-            <select name="confidence">
-                <option value="0.1">0.1</option>
-                <option value="0.5">0.5</option>
-                <option value="0.6">0.6</option>
-                <option value="0.7">0.7</option>
-                <option value="0.8">0.8</option>
-                <option value="0.9">0.9</option>
-                <option value="1.0" selected>1.0</option>
-            </select>
-        </p>
-
-        <button type="submit">Diagnosa Sekarang</button>
-    </form>
-
-    {% if results %}
-        <h2>Hasil Diagnosa:</h2>
-        <ul>
-            {% for name, weight in results %}
-                <li>{{ name }}{% if weight %} (Bobot: {{ weight|floatformat:2 }}){% endif %}</li>
-            {% endfor %}
-        </ul>
-    {% endif %}
-
-    {% if explanations %}
-        <h2>Penjelasan:</h2>
-        {% for exp in explanations %}
-            <div style="margin: 5px 0; padding: 5px; background: #eee; border-left: 3px solid #333;">
-                {{ exp }}
+<body class="bg-gray-50">
+    <!-- Navbar -->
+    <nav class="w-full bg-teal-700 text-white shadow-md">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <h1 class="text-xl font-bold">Sistem Pakar Diagnosa Tanaman Cabai</h1>
+            <div class="flex items-center space-x-4">
+                <a href="#" class="hover:underline">Beranda</a>
+                <a href="#" class="hover:underline">Tentang</a>
             </div>
-        {% endfor %}
-    {% endif %}
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8 max-w-4xl">
+        <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">Diagnosa Penyakit Tanaman Cabai</h2>
+            <p class="text-gray-600 mb-6">Pilih gejala yang dialami oleh tanaman cabai Anda untuk mendapatkan diagnosis.</p>
+
+            <form method="post" class="space-y-6">
+                {% csrf_token %}
+
+                <!-- Gejala -->
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-700 mb-3">Gejala yang Dialami</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        {% for symptom in symptoms %}
+                            <label class="flex items-center space-x-2 p-2 border rounded-lg hover:bg-gray-50 cursor-pointer">
+                                <input type="checkbox" name="symptoms" value="{{ symptom.code }}" class="rounded text-teal-600">
+                                <span>{{ symptom.name }}</span>
+                            </label>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Tingkat Kepercayaan -->
+                <div>
+                    <label class="block text-lg font-semibold text-gray-700 mb-2">Tingkat Kepercayaan</label>
+                    <select name="confidence" class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-teal-500 focus:outline-none">
+                        <option value="0.1">0.1</option>
+                        <option value="0.5">0.5</option>
+                        <option value="0.6">0.6</option>
+                        <option value="0.7">0.7</option>
+                        <option value="0.8">0.8</option>
+                        <option value="0.9">0.9</option>
+                        <option value="1.0" selected>1.0</option>
+                    </select>
+                </div>
+
+                <!-- Tombol Submit -->
+                <button type="submit" class="w-full py-3 bg-teal-600 text-white font-semibold rounded-lg shadow-md hover:bg-teal-700 transition duration-200">
+                    Diagnosa Sekarang
+                </button>
+            </form>
+        </div>
+
+        <!-- Hasil Diagnosa -->
+        {% if results %}
+            <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">Hasil Diagnosa</h2>
+                <ul class="space-y-3">
+                    {% for name, weight in results %}
+                        <li class="p-3 bg-teal-50 border border-teal-100 rounded-lg flex justify-between">
+                            <span class="font-medium">{{ name }}</span>
+                            {% if weight %}
+                                <span class="text-teal-700 font-semibold">Bobot: {{ weight|floatformat:2 }}</span>
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+
+        <!-- Penjelasan -->
+        {% if explanations %}
+            <div class="bg-white rounded-xl shadow-lg p-6">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">Penjelasan</h2>
+                <div class="space-y-3">
+                    {% for exp in explanations %}
+                        <div class="p-4 bg-blue-50 border-l-4 border-blue-500 text-gray-700 rounded">
+                            {{ exp }}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="mt-12 py-6 bg-gray-800 text-white text-center">
+        <p>&copy; 2025 Sistem Pakar Tanaman Cabai. Dibuat untuk pertanian modern.</p>
+    </footer>
 </body>
 </html>
